@@ -1,0 +1,91 @@
+version: v2
+name: test-bed
+
+build:
+  method: docker
+  context: .
+  dockerfile: Dockerfile
+
+services:
+  - name: hello-world
+    type: web
+    port: 8000
+    run: uv run uvicorn hello_world:app --host 0.0.0.0 --port 8000 --log-level warning
+    health_check:
+      path: /health
+
+  - name: hello-crash
+    type: web
+    port: 8000
+    run: uv run uvicorn hello_crash:app --host 0.0.0.0 --port 8000 --log-level warning
+    health_check:
+      path: /health
+
+  - name: hello-sigterm
+    type: web
+    port: 8000
+    run: uv run uvicorn hello_sigterm:app --host 0.0.0.0 --port 8000 --log-level warning
+    health_check:
+      path: /health
+
+  - name: hello-fail-health
+    type: web
+    port: 8000
+    run: uv run uvicorn hello_fail_health:app --host 0.0.0.0 --port 8000 --log-level warning
+    health_check:
+      path: /health
+
+  - name: hello-gpu
+    type: web
+    port: 8000
+    run: uv run uvicorn hello_gpu:app --host 0.0.0.0 --port 8000 --log-level warning
+    health_check:
+      path: /health
+
+  - name: aws-iam
+    type: web
+    port: 8000
+    run: uv run uvicorn aws_iam:app --host 0.0.0.0 --port 8000 --log-level warning
+    health_check:
+      path: /health
+
+  - name: hello-metrics
+    type: web
+    port: 8000
+    run: uv run uvicorn hello_metrics:app --host 0.0.0.0 --port 8000 --log-level warning
+    health_check:
+      path: /health
+    instances: 1
+    autoscaling:
+      enabled: true
+      minInstances: 1
+      maxInstances: 10
+      customAutoscaling:
+        prometheusMetricCustomAutoscaling:
+          metricName: http_requests_total
+          query: ceil(http_requests_total{endpoint="/"} / 10)
+          threshold: 1
+
+  - name: gpu-burner
+    type: web
+    port: 8000
+    run: uv run uvicorn gpu_burner:app --host 0.0.0.0 --port 8000 --log-level warning
+    health_check:
+      path: /health
+    gpu:
+      enabled: true
+      gpuCoresNvidia: 1
+
+  - name: temporal-worker
+    run: uv run python temporal_worker.py
+    type: worker
+    instances: 1
+    cpuCores: 0.5
+    ramMegabytes: 512
+
+  - name: temporal-client
+    run: uv run python temporal_client.py sustained --rate 5 --duration 300 --intensity medium
+    type: worker
+    instances: 1
+    cpuCores: 0.2
+    ramMegabytes: 256
