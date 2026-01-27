@@ -43,7 +43,7 @@ async def hello():
     ]
     return {
         "message": "Hello Health!",
-        "routes": routes
+        "routes": "\n".join(routes)
     }
 
 

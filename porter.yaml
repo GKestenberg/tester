@@ -70,19 +70,21 @@ services:
     type: web
     port: 8000
     run: uv run uvicorn health:app --host 0.0.0.0 --port 8000 --log-level warning
-    health_check:
-      startup:
-        path: /startup
-        periodSeconds: 15
-        failureThreshold: 10
-      liveness:
-        path: /liveness
-        periodSeconds: 15
-        failureThreshold: 3
-      readiness:
-        path: /readiness
-        periodSeconds: 15
-        failureThreshold: 3
+    livenessCheck:
+      enabled: true
+      httpPath: /startup
+      timeoutSeconds: 1
+      initialDelaySeconds: 0
+    readinessCheck:
+      enabled: true
+      httpPath: /readiness
+      timeoutSeconds: 1
+      initialDelaySeconds: 0
+    startupCheck:
+      enabled: true
+      httpPath: /startup
+      timeoutSeconds: 1
+      initialDelaySeconds: 0
 
   - name: gpu-burner
     type: web
