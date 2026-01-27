@@ -9,9 +9,9 @@ COPY hello_world.py .
 COPY hello_crash.py .
 COPY hello_sigterm.py .
 COPY hello_fail_health.py .
-COPY hello_gpu.py .
+COPY gpu.py .
 COPY aws_iam.py .
-COPY hello_metrics.py .
+COPY metrics.py .
 COPY temporal_worker.py .
 COPY temporal_client.py .
 COPY gpu_burner.py .
