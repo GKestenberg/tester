@@ -66,6 +66,24 @@ services:
           query: ceil(http_requests_total{endpoint="/"} / 10)
           threshold: 1
 
+  - name: hello-health
+    type: web
+    port: 8000
+    run: uv run uvicorn health:app --host 0.0.0.0 --port 8000 --log-level warning
+    health_check:
+      startup:
+        path: /startup
+        periodSeconds: 15
+        failureThreshold: 10
+      liveness:
+        path: /liveness
+        periodSeconds: 15
+        failureThreshold: 3
+      readiness:
+        path: /readiness
+        periodSeconds: 15
+        failureThreshold: 3
+
   - name: gpu-burner
     type: web
     port: 8000

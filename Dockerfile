@@ -15,6 +15,7 @@ COPY hello_metrics.py .
 COPY temporal_worker.py .
 COPY temporal_client.py .
 COPY gpu_burner.py .
+COPY health.py .
 
 RUN uv sync --no-dev
 
