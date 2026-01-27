@@ -90,9 +90,6 @@ services:
     run: uv run uvicorn gpu_burner:app --host 0.0.0.0 --port 8000 --log-level warning
     health_check:
       path: /health
-    gpu:
-      enabled: true
-      gpuCoresNvidia: 1
 
   - name: temporal-worker
     run: uv run python temporal_worker.py
