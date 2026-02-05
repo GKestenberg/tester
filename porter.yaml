@@ -128,3 +128,21 @@ services:
         synced: true
       TEMPORAL_TASK_QUEUE:
         synced: true
+
+  - name: db-server
+    type: web
+    port: 8000
+    run: uv run uvicorn db_server:app --host 0.0.0.0 --port 8000 --log-level warning
+    health_check:
+      path: /health
+    env:
+      DB_HOST:
+        synced: true
+      DB_PORT:
+        synced: true
+      DB_NAME:
+        synced: true
+      DB_USER:
+        synced: true
+      DB_PASS:
+        synced: true

@@ -13,12 +13,9 @@ import time
 import math
 from datetime import timedelta
 from concurrent.futures import ThreadPoolExecutor
-from typing import List
-
 from temporalio import workflow, activity
 from temporalio.client import Client
 from temporalio.worker import Worker
-from temporalio.common import RetryPolicy
 from dotenv import load_dotenv
 
 if os.path.exists('.env'):
@@ -454,7 +451,7 @@ async def create_worker():
                 api_key=api_key,
                 tls=True,
             )
-            logger.info(f"Connected to Temporal Cloud")
+            logger.info("Connected to Temporal Cloud")
             break
         except Exception as e:
             logger.warning(f"Connection attempt {attempt} failed: {type(e).__name__}: {e}")

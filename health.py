@@ -4,7 +4,6 @@ Health Check Demo - FastAPI app demonstrating startup, liveness, and readiness p
 """
 
 import asyncio
-import time
 from fastapi import FastAPI, Response
 
 app = FastAPI(title="Health Check Demo")

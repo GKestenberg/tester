@@ -6,3 +6,8 @@ tasks:
     cmds:
       - uv run ruff check .
       - uv run pyright .
+
+  deploy:
+    desc: Deploy a single service from porter.yaml
+    cmds:
+      - bash scripts/deploy.sh {{.CLI_ARGS}}

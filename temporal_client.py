@@ -11,8 +11,6 @@ import os
 import uuid
 import time
 from dataclasses import dataclass
-from typing import Optional
-
 from temporalio.client import Client
 from dotenv import load_dotenv
 
@@ -186,7 +184,7 @@ async def cmd_sustained(client: Client, args: argparse.Namespace):
     intensity = args.intensity
     workflow_type = args.type
 
-    logger.info(f"Starting sustained load")
+    logger.info("Starting sustained load")
     logger.info(f"  Rate: {rate} workflows/sec")
     logger.info(f"  Duration: {duration} seconds")
     logger.info(f"  Intensity: {intensity}")
@@ -226,7 +224,7 @@ async def cmd_ramp(client: Client, args: argparse.Namespace):
     hold_duration = args.hold_duration
     intensity = args.intensity
 
-    logger.info(f"Starting ramp test")
+    logger.info("Starting ramp test")
     logger.info(f"  Max rate: {max_rate} workflows/sec")
     logger.info(f"  Ramp duration: {ramp_duration}s")
     logger.info(f"  Hold duration: {hold_duration}s")
@@ -288,7 +286,7 @@ async def cmd_stress(client: Client, args: argparse.Namespace):
     concurrency = args.concurrency
     intensity = args.intensity
 
-    logger.info(f"Starting MAXIMUM STRESS test")
+    logger.info("Starting MAXIMUM STRESS test")
     logger.info(f"  Duration: {duration}s")
     logger.info(f"  Concurrency: {concurrency}")
     logger.info(f"  Intensity: {intensity}")
