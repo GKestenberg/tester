@@ -99,6 +99,19 @@ services:
     instances: 1
     cpuCores: 0.5
     ramMegabytes: 512
+    env:
+      TEMPORAL_HOST:
+        synced: true
+      TEMPORAL_NAMESPACE:
+        synced: true
+      TEMPORAL_API_KEY:
+        synced: true
+      TEMPORAL_TASK_QUEUE:
+        synced: true
+      MAX_CONCURRENT_ACTIVITIES:
+        synced: true
+      THREAD_POOL_SIZE:
+        synced: true
 
   - name: temporal-client
     run: uv run python temporal_client.py sustained --rate 5 --duration 300 --intensity medium
@@ -106,3 +119,12 @@ services:
     instances: 1
     cpuCores: 0.2
     ramMegabytes: 256
+    env:
+      TEMPORAL_HOST:
+        synced: true
+      TEMPORAL_NAMESPACE:
+        synced: true
+      TEMPORAL_API_KEY:
+        synced: true
+      TEMPORAL_TASK_QUEUE:
+        synced: true
