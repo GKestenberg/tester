@@ -50,7 +50,25 @@ BEGIN {
   in_target = 0
   service_found = 0
   header_done = 0
+  in_predeploy = 0
+  predeploy_block = ""
   target_line = "  - name: " svc
+}
+
+# Capture top-level predeploy block
+/^predeploy:/ {
+  in_predeploy = 1
+  predeploy_block = $0 "\n"
+  next
+}
+
+in_predeploy {
+  if ($0 ~ /^  / || $0 ~ /^$/) {
+    predeploy_block = predeploy_block $0 "\n"
+    next
+  } else {
+    in_predeploy = 0
+  }
 }
 
 !header_done {
@@ -85,6 +103,9 @@ END {
   if (!service_found) {
     printf "ERROR: Service \"%s\" not found in porter.yaml\n", svc > "/dev/stderr"
     exit 1
+  }
+  if (predeploy_block != "") {
+    printf "\n%s", predeploy_block
   }
 }
 ' "$PORTER_FILE" > "$OUTPUT_FILE" || {

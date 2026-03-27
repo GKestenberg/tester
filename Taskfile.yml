@@ -11,3 +11,56 @@ tasks:
     desc: Deploy a single service from porter.yaml
     cmds:
       - bash scripts/deploy.sh {{.CLI_ARGS}}
+
+  compdef:
+    desc: Generate zsh completions for task commands
+    cmds:
+      - |
+        cat > ~/.tester-completion.zsh << 'COMPDEF_EOF'
+        _task_deploy() {
+          local -a services
+          if [[ -f porter.yaml ]]; then
+            services=(${(f)"$(grep '  - name: ' porter.yaml | sed 's/.*- name: //')"})
+          fi
+          if (( ${#services} )); then
+            _describe 'service' services
+          fi
+        }
+
+        _task() {
+          local -a subcommands
+          subcommands=(
+            'deploy:Deploy a single service from porter.yaml'
+            'lint:Lint Python files'
+            'compdef:Generate zsh completions for task commands'
+          )
+
+          _arguments -C \
+            '1:subcommand:->subcmd' \
+            '*::arg:->args'
+
+          case $state in
+            subcmd)
+              _describe 'task subcommand' subcommands
+              ;;
+            args)
+              case $words[1] in
+                deploy)
+                  # handle the -- separator
+                  if [[ ${words[(i)--]} -le ${#words} ]]; then
+                    _task_deploy
+                  else
+                    _arguments '*:--'
+                  fi
+                  ;;
+              esac
+              ;;
+          esac
+        }
+
+        compdef _task task
+        COMPDEF_EOF
+      - echo "Generated ~/.tester-completion.zsh"
+      - echo "Add the following to your .zshrc to enable completions:"
+      - echo ""
+      - echo "  source ~/.tester-completion.zsh"
