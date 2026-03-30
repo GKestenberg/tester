@@ -154,13 +154,12 @@ services:
     health_check:
       path: /health
 
-  - name: predeploy
+  - name: fail-schedule
     type: web
     port: 8000
     run: uv run uvicorn hello_world:app --host 0.0.0.0 --port 8000 --log-level warning
     health_check:
       path: /health
     private: true
-
-predeploy:
-  run: echo hi
+    cpuCores: 256
+    ramMegabytes: 1048576
