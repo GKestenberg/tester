@@ -1,0 +1,14 @@
+version: v2
+name: test-buildpack
+
+build:
+  method: pack
+  builder: heroku/builder:22
+
+services:
+  - name: hello-world
+    type: web
+    port: 8000
+    run: uv run uvicorn hello_world:app --host 0.0.0.0 --port 8000 --log-level warning
+    health_check:
+      path: /health

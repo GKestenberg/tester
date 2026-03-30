@@ -19,8 +19,9 @@ tasks:
         cat > ~/.tester-completion.zsh << 'COMPDEF_EOF'
         _task_deploy() {
           local -a services
+          services=('buildpack:Deploy hello-world with buildpacks')
           if [[ -f porter.yaml ]]; then
-            services=(${(f)"$(grep '  - name: ' porter.yaml | sed 's/.*- name: //')"})
+            services+=(${(f)"$(grep '  - name: ' porter.yaml | sed 's/.*- name: //')"})
           fi
           if (( ${#services} )); then
             _describe 'service' services

@@ -7,7 +7,19 @@ set -euo pipefail
 if [ $# -lt 1 ]; then
   echo "Error: No service name provided."
   echo "Usage: ./deploy.sh <service-name>"
+  echo "       ./deploy.sh buildpack"
   exit 1
+fi
+
+if [ "$1" = "buildpack" ]; then
+  BUILDPACKS_FILE="buildpacks.porter.yaml"
+  if [ ! -f "$BUILDPACKS_FILE" ]; then
+    echo "Error: ${BUILDPACKS_FILE} not found in the current directory."
+    exit 1
+  fi
+  echo "Running: porter apply -f ${BUILDPACKS_FILE}"
+  porter apply -f "$BUILDPACKS_FILE"
+  exit 0
 fi
 
 SERVICE_NAME="$1"
